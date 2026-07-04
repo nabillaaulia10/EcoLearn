@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kuis Sampah — EcoLearn</title>
+    <link rel="stylesheet" href="css/style.css?v=1">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <a href="index.html" class="nav-logo">
+        <span class="logo-icon">♻️</span> EcoLearn
+      </a>
+
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#" id="btn-kembali">← Kembali</a></li>
+        <li><a href="dragdrop-game.html">🗑️ Game Drag-Drop</a></li>
+      </ul>
+
+      <div class="navbar-right">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Ganti tema">
+          🌙
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Buka menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- INTRO MODAL -->
+    <div class="intro-overlay" id="intro-overlay">
+      <div class="intro-card">
+        <div class="intro-character">
+          <svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
+            <ellipse
+              cx="100"
+              cy="205"
+              rx="55"
+              ry="10"
+              fill="#000"
+              opacity="0.08"
+            />
+            <rect
+              x="35"
+              y="95"
+              width="80"
+              height="100"
+              rx="14"
+              fill="#ffffff"
+              stroke="#388e3c"
+              stroke-width="3"
+            />
+            <rect x="48" y="108" width="54" height="74" rx="6" fill="#e8f5e9" />
+            <text
+              x="75"
+              y="135"
+              font-size="11"
+              font-weight="700"
+              fill="#2e7d32"
+              text-anchor="middle"
+            >
+              KUIS
+            </text>
+            <text
+              x="75"
+              y="152"
+              font-size="9"
+              fill="#388e3c"
+              text-anchor="middle"
+            >
+              SAMPAH
+            </text>
+            <circle cx="75" cy="167" r="11" fill="#a5d6a7" />
+            <text x="75" y="171" font-size="11" text-anchor="middle">♻️</text>
+            <circle cx="150" cy="110" r="38" fill="#ffe0b2" />
+            <circle cx="138" cy="105" r="4" fill="#3e2723" />
+            <circle cx="160" cy="105" r="4" fill="#3e2723" />
+            <path
+              d="M138 122 Q150 130 162 122"
+              stroke="#3e2723"
+              stroke-width="2.5"
+              fill="none"
+              stroke-linecap="round"
+            />
+            <path
+              d="M115 95 Q150 65 185 95 Q188 75 150 68 Q112 75 115 95"
+              fill="#4caf50"
+            />
+            <rect
+              x="115"
+              y="130"
+              width="35"
+              height="55"
+              rx="10"
+              fill="#4caf50"
+            />
+            <rect
+              x="100"
+              y="135"
+              width="20"
+              height="45"
+              rx="9"
+              fill="#4caf50"
+              transform="rotate(-15 110 150)"
+            />
+            <circle cx="98" cy="120" r="9" fill="#ffe0b2" />
+          </svg>
+        </div>
+        <div class="intro-body">
+          <span class="intro-badge">🧠 Kuis Sampah</span>
+          <h2 class="intro-title">Siap Uji Pemahamanmu?</h2>
+          <ul class="intro-list">
+            <li>
+              <span class="intro-num">1</span>Soal berjumlah<strong
+                >10 butir</strong
+              >pilihan ganda
+            </li>
+            <li>
+              <span class="intro-num">2</span>Terdapat<strong
+                >Bantuan (Hint)</strong
+              >sebanyak 3 kali
+            </li>
+            <li>
+              <span class="intro-num">3</span>Jika kembali,<strong
+                >Skor akan direset</strong
+              >dari awal
+            </li>
+          </ul>
+          <button class="intro-start-btn" id="btn-mulai-kuis">
+            🚀 Mulai Kuis
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-page-wrapper">
+      <div class="game-page-header">
+        <h1>🧠 Kuis Sampah</h1>
+        <p>
+          Jawab 10 pertanyaan tentang sampah dan lingkungan. Setiap jawaban
+          benar = 10 poin!
+        </p>
+      </div>
+
+      <div class="kuis-container" id="kuis-container">
+        <!-- SOAL -->
+        <div id="kuis-main">
+          <div class="kuis-progress">
+            <div class="kuis-progress-bar">
+              <div
+                class="kuis-progress-fill"
+                id="progress-fill"
+                style="width: 10%"
+              ></div>
+            </div>
+            <div class="kuis-meta">
+              <span id="soal-counter">Soal 1 dari 10</span>
+              <span class="kuis-score-display"
+                >Skor: <strong id="skor-live">0</strong></span
+              >
+            </div>
+          </div>
+
+          <div class="hint-bar">
+            <button class="hint-btn" id="btn-hint">
+              💡 Bantuan <span class="hint-count" id="hint-count">3</span>
+            </button>
+          </div>
+
+          <div class="hint-message" id="hint-message"></div>
+
+          <p class="kuis-question" id="pertanyaan-text"></p>
+
+          <div class="kuis-options" id="options-container"></div>
+
+          <div class="kuis-feedback" id="kuis-feedback"></div>
+
+          <div class="kuis-nav">
+            <span></span>
+            <button class="btn-game" id="btn-next" disabled>Lanjut →</button>
+          </div>
+        </div>
+
+        <!-- HASIL -->
+        <div class="result-box" id="result-box">
+          <div class="result-emoji" id="result-emoji"></div>
+          <h2 id="result-title"></h2>
+          <p id="result-desc"></p>
+          <div class="result-score" id="result-score"></div>
+          <br /><br />
+          <button class="btn-game" onclick="restartKuis()">🔄 Main Lagi</button>
+          &nbsp;&nbsp;
+          <a
+            href="#"
+            id="btn-beranda"
+            class="btn-secondary"
+            style="display: inline-flex; align-items: center; gap: 8px"
+            >🏠 Beranda</a
+          >
+        </div>
+      </div>
+    </div>
+    <script src="js/game/kuis-game.js?v=1"></script>
+  </body>
+</html>

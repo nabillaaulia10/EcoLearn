@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game Drag-Drop — EcoLearn</title>
+    <link rel="stylesheet" href="css/style.css?v=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+      /* ── Trash bins layout ── */
+      .bins-row {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin: 1.75rem 0 1.5rem;
+      }
+      .trash-bin {
+        width: 140px;
+        min-height: 130px;
+        border: 2.5px dashed var(--gray-300);
+        border-radius: var(--radius-md);
+        padding: 1rem 0.75rem 0.75rem;
+        text-align: center;
+        background: var(--gray-50);
+        transition: all 0.2s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        position: relative;
+      }
+      .trash-bin.dragover {
+        border-color: var(--green-500);
+        background: var(--green-50);
+        transform: scale(1.04);
+      }
+      .trash-bin.hint-glow {
+        border-color: #ffca28;
+        box-shadow: 0 0 0 3px rgba(255, 202, 40, 0.35);
+        animation: hintPulse 1s ease infinite;
+      }
+      @keyframes hintPulse {
+        0%,
+        100% {
+          box-shadow: 0 0 0 3px rgba(255, 202, 40, 0.35);
+        }
+        50% {
+          box-shadow: 0 0 0 6px rgba(255, 202, 40, 0.15);
+        }
+      }
+      .bin-icon {
+        font-size: 2.2rem;
+      }
+      .bin-label {
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--gray-600);
+        letter-spacing: 0.2px;
+      }
+      .bin-count {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        width: 24px;
+        height: 24px;
+        background: var(--green-600);
+        color: #fff;
+        border-radius: 50%;
+        font-size: 0.75rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+      .bin-count.show {
+        opacity: 1;
+      }
+
+      /* ── Trash items pool ── */
+      .trash-item.dragging {
+        opacity: 0.45;
+        cursor: grabbing;
+        transform: scale(0.96);
+        width: fit-content;
+      }
+      .trash-item.hint-target {
+        border-color: #ffca28;
+        background: var(--amber-50);
+        box-shadow: 0 0 0 2px rgba(255, 202, 40, 0.4);
+      }
+      .trash-item:hover {
+        border-color: var(--green-400);
+        box-shadow: var(--shadow-sm);
+      }
+
+      /* ── Score bar ── */
+      .score-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--gray-100);
+        border-radius: var(--radius-sm);
+        padding: 10px 16px;
+        margin-bottom: 1.25rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--gray-700);
+        border: 1px solid var(--gray-200);
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .score-bar .score-val {
+        color: var(--green-600);
+        font-size: 1.1rem;
+      }
+
+      /* ── Feedback toast ── */
+      .dd-feedback {
+        position: fixed;
+        bottom: 28px;
+        left: 50%;
+        transform: translateX(-50%) translateY(20px);
+        padding: 12px 24px;
+        border-radius: var(--radius-lg);
+        font-size: 0.95rem;
+        font-weight: 600;
+        opacity: 0;
+        transition: all 0.3s ease;
+        pointer-events: none;
+        z-index: 999;
+        white-space: nowrap;
+        box-shadow: var(--shadow-lg);
+      }
+      .dd-feedback.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+      .dd-feedback.benar {
+        background: #388e3c;
+        color: #fff;
+      }
+      .dd-feedback.salah {
+        background: #c62828;
+        color: #fff;
+      }
+
+      /* ── Result overlay ── */
+      .dd-result {
+        display: none;
+        text-align: center;
+        padding: 1.5rem 0 0.5rem;
+        border-top: 1px solid var(--gray-200);
+        margin-top: 1.5rem;
+      }
+      .dd-result.show {
+        display: block;
+      }
+      .dd-result .result-emoji {
+        font-size: 3.5rem;
+        margin-bottom: 0.75rem;
+      }
+      .dd-result h2 {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: var(--gray-900);
+        margin-bottom: 0.5rem;
+      }
+      .dd-result p {
+        color: var(--gray-500);
+        font-size: 0.95rem;
+        margin-bottom: 1.25rem;
+      }
+      .dd-result .final-score {
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: var(--green-600);
+        letter-spacing: -1px;
+      }
+
+      /* Dark mode additions for dragdrop */
+      [data-theme='dark'] .score-bar {
+        background: #1a1a1a;
+        border-color: var(--gray-200);
+        color: var(--gray-600);
+      }
+      [data-theme='dark'] .dd-result {
+        border-top-color: var(--gray-200);
+      }
+      [data-theme='dark'] .dd-result h2 {
+        color: var(--gray-900);
+      }
+      [data-theme='dark'] .dd-result p {
+        color: var(--gray-500);
+      }
+      [data-theme='dark'] .dragdrop-container {
+        background: #1e1e1e;
+        border-color: var(--gray-200);
+      }
+      [data-theme='dark'] .trash-item.hint-target {
+        background: #2d1500;
+      }
+
+      /* Mobile */
+      @media (max-width: 600px) {
+        .trash-bin {
+          width: 115px;
+          min-height: 110px;
+        }
+        .bin-icon {
+          font-size: 1.8rem;
+        }
+        .bin-label {
+          font-size: 0.7rem;
+        }
+        .score-bar {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <a href="index.html" class="nav-logo">
+        <span class="logo-icon">♻️</span> EcoLearn
+      </a>
+
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#" id="btn-kembali">← Kembali</a></li>
+        <li><a href="kuis-game.html">🧠 Kuis Sampah</a></li>
+      </ul>
+
+      <div class="navbar-right">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Ganti tema">
+          🌙
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Buka menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- INTRO MODAL -->
+    <div class="intro-overlay" id="intro-overlay">
+      <div class="intro-card">
+        <div class="intro-character">
+          <svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
+            <ellipse
+              cx="100"
+              cy="205"
+              rx="55"
+              ry="10"
+              fill="#000"
+              opacity="0.08"
+            />
+            <rect
+              x="35"
+              y="95"
+              width="80"
+              height="100"
+              rx="14"
+              fill="#ffffff"
+              stroke="#2e7d32"
+              stroke-width="3"
+            />
+            <rect x="48" y="108" width="54" height="74" rx="6" fill="#e0f2f1" />
+            <text
+              x="75"
+              y="132"
+              font-size="10"
+              font-weight="700"
+              fill="#00695c"
+              text-anchor="middle"
+            >
+              PILAH
+            </text>
+            <text
+              x="75"
+              y="148"
+              font-size="9"
+              fill="#00897b"
+              text-anchor="middle"
+            >
+              SAMPAH
+            </text>
+            <rect x="58" y="156" width="14" height="16" rx="2" fill="#388e3c" />
+            <rect x="78" y="156" width="14" height="16" rx="2" fill="#1565c0" />
+            <text x="65" y="168" font-size="8" text-anchor="middle">🟢</text>
+            <text x="85" y="168" font-size="8" text-anchor="middle">🔵</text>
+            <circle cx="150" cy="110" r="38" fill="#ffe0b2" />
+            <circle cx="138" cy="105" r="4" fill="#3e2723" />
+            <circle cx="160" cy="105" r="4" fill="#3e2723" />
+            <path
+              d="M138 122 Q150 130 162 122"
+              stroke="#3e2723"
+              stroke-width="2.5"
+              fill="none"
+              stroke-linecap="round"
+            />
+            <path
+              d="M115 95 Q150 65 185 95 Q188 75 150 68 Q112 75 115 95"
+              fill="#26a69a"
+            />
+            <rect
+              x="115"
+              y="130"
+              width="35"
+              height="55"
+              rx="10"
+              fill="#26a69a"
+            />
+            <rect
+              x="100"
+              y="135"
+              width="20"
+              height="45"
+              rx="9"
+              fill="#26a69a"
+              transform="rotate(-15 110 150)"
+            />
+            <circle cx="98" cy="120" r="9" fill="#ffe0b2" />
+            <text x="170" y="150" font-size="20">🗑️</text>
+          </svg>
+        </div>
+        <div class="intro-body">
+          <span class="intro-badge">🗑️ Drag &amp; Drop</span>
+          <h2 class="intro-title">Siap Pilah Sampah?</h2>
+          <ul class="intro-list">
+            <li>
+              <span class="intro-num">1</span> Seret
+              <strong>18 item sampah</strong> ke tong yang tepat
+            </li>
+            <li>
+              <span class="intro-num">2</span> Terdapat
+              <strong>Bantuan (Hint)</strong> sebanyak 9 kali
+            </li>
+            <li>
+              <span class="intro-num">3</span> Jika kembali,
+              <strong>Skor akan direset</strong> dari awal
+            </li>
+          </ul>
+          <button class="intro-start-btn" id="btn-mulai-dd">
+            🚀 Mulai Bermain
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-page-wrapper">
+      <div class="game-page-header">
+        <h1>🗑️ Game Pilah Sampah</h1>
+        <p>
+          Seret setiap sampah ke tong yang tepat. Setiap jawaban benar = +10
+          poin!
+        </p>
+      </div>
+
+      <div class="dragdrop-container">
+        <!-- Score -->
+        <div class="score-bar">
+          <span>Skor: <span class="score-val" id="dd-skor">0</span></span>
+          <span id="dd-progress">0 / 0 sampah dipilah</span>
+          <span
+            >Benar:
+            <span style="color: var(--green-600)" id="dd-benar">0</span>
+            &nbsp;|&nbsp; Salah:
+            <span style="color: #e53935" id="dd-salah">0</span></span
+          >
+        </div>
+
+        <div class="hint-bar">
+          <button class="hint-btn" id="btn-hint">
+            💡 Bantuan <span class="hint-count" id="hint-count">3</span>
+          </button>
+        </div>
+
+        <div class="hint-message" id="hint-message"></div>
+
+        <!-- Items pool -->
+        <div class="items-pool" id="items-pool"></div>
+
+        <!-- Trash bins -->
+        <div class="bins-row" id="bins-row"></div>
+
+        <!-- Buttons -->
+        <div
+          style="
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-top: 0.5rem;
+          "
+        >
+          <button class="btn-game" id="btn-restart">🔄 Main Lagi</button>
+          <a
+            href="#"
+            id="btn-beranda"
+            class="btn-secondary"
+            style="display: inline-flex; align-items: center; gap: 8px"
+            >🏠 Beranda</a
+          >
+        </div>
+
+        <!-- Result -->
+        <div class="dd-result" id="dd-result">
+          <div class="result-emoji" id="dd-result-emoji"></div>
+          <h2 id="dd-result-title"></h2>
+          <p id="dd-result-desc"></p>
+          <div class="final-score" id="dd-final-score"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feedback toast -->
+    <div class="dd-feedback" id="dd-feedback"></div>
+    <script src="js/game/draganddrop-game.js?v=1"></script>
+  </body>
+</html>

@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Eco Memory Game — EcoLearn</title>
+    <link rel="stylesheet" href="css/style.css?v=1">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+
+<style>
+  /* =========================
+   BASE RESET
+========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #f3f4f6;
+  color: #111827;
+  transition: 0.3s ease;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  background: #ffffff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: 0.3s;
+}
+
+.nav-logo {
+  font-weight: bold;
+  text-decoration: none;
+  color: #16a34a;
+  font-size: 18px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 15px;
+  list-style: none;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #374151;
+}
+
+/* =========================
+   INTRO MODAL
+========================= */
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.intro-card {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+}
+
+.intro-badge {
+  display: inline-block;
+  background: #dcfce7;
+  color: #166534;
+  padding: 5px 10px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+.intro-title {
+  margin: 10px 0;
+}
+
+.intro-list {
+  text-align: left;
+  margin: 15px 0;
+  padding-left: 20px;
+}
+
+.intro-num {
+  font-weight: bold;
+  margin-right: 6px;
+  color: #16a34a;
+}
+
+.intro-start-btn {
+  background: #16a34a;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* =========================
+   GAME HEADER
+========================= */
+.game-page-header {
+  text-align: center;
+  margin: 25px 0;
+}
+
+.game-page-header h1 {
+  color: #16a34a;
+}
+
+/* =========================
+   MEMORY GAME
+========================= */
+.memory-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 10px;
+}
+
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  max-width: 650px;
+  width: 100%;
+}
+
+/* CARD */
+.card {
+  height: 110px;
+  background: linear-gradient(145deg, #1f2937, #111827);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 13px;
+  text-align: center;
+  padding: 10px;
+  user-select: none;
+  transition: 0.3s ease;
+  position: relative;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+/* HOVER */
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* TERTUTUP ICON */
+.card::before {
+  content: "❓";
+  position: absolute;
+  font-size: 18px;
+  color: #9ca3af;
+}
+
+/* OPEN */
+.card.open {
+  transform: scale(1.05);
+}
+
+.card.open::before {
+  display: none;
+}
+
+/* MATCHED */
+.card.matched {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.8);
+}
+
+/* =========================
+   RESULT BOX
+========================= */
+.result-box {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* =========================
+   BUTTON
+========================= */
+.btn-game {
+  background: #16a34a;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* =========================
+   DARK MODE
+========================= */
+body.dark {
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+body.dark .navbar {
+  background: #111827;
+}
+
+body.dark .nav-links a {
+  color: #e5e7eb;
+}
+
+body.dark .intro-card {
+  background: #111827;
+  color: white;
+}
+
+body.dark .card {
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+}
+
+body.dark .card::before {
+  color: #94a3b8;
+}
+
+body.dark .result-box {
+  color: white;
+}
+
+
+/* =========================
+   GAME WRAPPER & CONTAINER FIX
+========================= */
+
+.game-page-wrapper {
+  background: transparent;
+  transition: 0.3s ease;
+}
+
+.kuis-container,
+.container {
+  background: #ffffff;
+  color: #111827;
+  padding: 20px;
+  border-radius: 16px;
+  transition: 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+/* =========================
+   DARK MODE FIX (IMPORTANT)
+========================= */
+
+body.dark .game-page-wrapper {
+  background: transparent;
+}
+
+body.dark .kuis-container,
+body.dark .container {
+  background: #111827;
+  color: #e5e7eb;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+/* HEADER GAME */
+.game-page-header {
+  background: transparent;
+  transition: 0.3s ease;
+}
+
+body.dark .game-page-header {
+  color: #e5e7eb;
+}
+
+/* INTRO LIST / TEXT */
+body.dark .intro-card {
+  background: #0f172a;
+  color: white;
+}
+
+.game-page-header h1 {
+  transition: 0.3s ease;
+}
+
+.game-page-header p {
+  transition: 0.3s ease;
+}
+
+body.dark .game-page-header h2 {
+  color: #f8fafc;
+}
+
+body.dark .game-page-header p {
+  color: #cbd5e1;
+}
+
+
+/* =========================
+   FORCE DARK MODE TEXT FIX (GLOBAL)
+========================= */
+
+
+/* header tetap lebih soft */
+body.dark h1 {
+  color: #f8fafc !important;
+}
+
+body.dark h2 {
+  color: #f1f5f9 !important;
+}
+
+body.dark p {
+  color: #cbd5e1 !important;
+}
+
+/* card text tetap readable */
+body.dark .card {
+  color: #ffffff !important;
+}
+
+/* container tetap clean */
+body.dark .kuis-container,
+body.dark .container {
+  background: #0f172a !important;
+}
+
+/* intro fix */
+body.dark .intro-card,
+body.dark .intro-title,
+body.dark .intro-list,
+body.dark .intro-num {
+  color: #ffffff !important;
+}
+</style>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <a href="index.html" class="nav-logo">
+        <span class="logo-icon">♻️</span> EcoLearn
+      </a>
+
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#" id="btn-kembali">← Kembali</a></li>
+        <li><a href="dragdrop-game.html">🃏 Memory Card</a></li>
+      </ul>
+
+      <div class="navbar-right">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Ganti tema">
+          🌙
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Buka menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- INTRO MODAL -->
+    <div class="intro-overlay" id="intro-overlay">
+      <div class="intro-card">
+        <div class="intro-character">
+          <svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
+            <ellipse
+              cx="100"
+              cy="205"
+              rx="55"
+              ry="10"
+              fill="#000"
+              opacity="0.08"
+            />
+            <rect
+              x="35"
+              y="95"
+              width="80"
+              height="100"
+              rx="14"
+              fill="#ffffff"
+              stroke="#388e3c"
+              stroke-width="3"
+            />
+            <rect x="48" y="108" width="54" height="74" rx="6" fill="#e8f5e9" />
+            <text
+              x="75"
+              y="135"
+              font-size="11"
+              font-weight="700"
+              fill="#2e7d32"
+              text-anchor="middle"
+            >
+              KUIS
+            </text>
+            <text
+              x="75"
+              y="152"
+              font-size="9"
+              fill="#388e3c"
+              text-anchor="middle"
+            >
+              SAMPAH
+            </text>
+            <circle cx="75" cy="167" r="11" fill="#a5d6a7" />
+            <text x="75" y="171" font-size="11" text-anchor="middle">♻️</text>
+            <circle cx="150" cy="110" r="38" fill="#ffe0b2" />
+            <circle cx="138" cy="105" r="4" fill="#3e2723" />
+            <circle cx="160" cy="105" r="4" fill="#3e2723" />
+            <path
+              d="M138 122 Q150 130 162 122"
+              stroke="#3e2723"
+              stroke-width="2.5"
+              fill="none"
+              stroke-linecap="round"
+            />
+            <path
+              d="M115 95 Q150 65 185 95 Q188 75 150 68 Q112 75 115 95"
+              fill="#4caf50"
+            />
+            <rect
+              x="115"
+              y="130"
+              width="35"
+              height="55"
+              rx="10"
+              fill="#4caf50"
+            />
+            <rect
+              x="100"
+              y="135"
+              width="20"
+              height="45"
+              rx="9"
+              fill="#4caf50"
+              transform="rotate(-15 110 150)"
+            />
+            <circle cx="98" cy="120" r="9" fill="#ffe0b2" />
+          </svg><h1>🧠 Kuis Sampah</h1>
+        </div>
+        <div class="intro-body">
+          <span class="intro-badge">🃏 Eco Memory Game</span>
+          <h2 class="intro-title">Siap Mencocokkan Sampah?</h2>
+          <ul class="intro-list">
+            <li>
+              <span class="intro-num">1</span>
+              Temukan pasangan antara <strong>jenis sampah</strong> dan <strong>waktu terurai</strong>
+            </li>
+            <li>
+              <span class="intro-num">2</span>
+              Buka kartu satu per satu untuk mencari pasangan yang benar
+            </li>
+            <li>
+              <span class="intro-num">3</span>
+              Jika cocok, kartu akan hilang. Jika salah, kartu akan tertutup kembali
+            </li>
+          </ul>
+          <button class="intro-start-btn" id="btn-mulai-kuis">
+            🚀 Mulai Kuis
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-page-wrapper">
+      <div class="game-page-header">
+        <h1>🃏 Eco Memory Matching Game</h1>
+        <p>
+          Cocokkan kartu sampah dengan waktu terurainya. Latih daya ingat dan pengetahuan lingkunganmu!
+        </p>
+      </div>
+
+      <div class="kuis-container" id="kuis-container">
+        
+
+      <div class="container">
+
+          <div class="section-header">
+            <span class="section-label">🎮 Eco Memory Game</span>
+
+            <h2 class="section-title">Cocokkan Sampah & Waktu Terurai</h2>
+
+            <p class="section-subtitle">
+              Klik kartu untuk membuka dan cari pasangan yang benar.
+            </p>
+          </div>
+
+          <div class="memory-grid" id="gameBoard">
+
+            <!-- kartu akan dibuat JS -->
+
+          </div>
+
+      </div>
+
+        <!-- HASIL -->
+        <div class="result-box" id="result-box">
+          <div class="result-emoji" id="result-emoji"></div>
+          <h2 id="result-title"></h2>
+          <p id="result-desc"></p>
+          <div class="result-score" id="result-score"></div>
+          <br /><br />
+          <button class="btn-game" onclick="restartKuis()">🔄 Main Lagi</button>
+          &nbsp;&nbsp;
+          <a
+            href="#"
+            id="btn-beranda"
+            class="btn-secondary"
+            style="display: inline-flex; align-items: center; gap: 8px"
+            >🏠 Beranda</a
+          >
+        </div>
+      </div>
+    </div>
+    <script src="js/game/kuis-game.js?v=1"></script>
+  </body>
+
+<script>
+const cardsData = [
+  { name: "🥤 Plastik", pair: "450 Tahun" },
+  { name: "450 Tahun", pair: "🥤 Plastik" },
+
+  { name: "🍌 Organik", pair: "1–6 Bulan" },
+  { name: "1–6 Bulan", pair: "🍌 Organik" },
+
+  { name: "📄 Kertas", pair: "2–5 Bulan" },
+  { name: "2–5 Bulan", pair: "📄 Kertas" },
+
+  { name: "🔋 Baterai", pair: "100+ Tahun" },
+  { name: "100+ Tahun", pair: "🔋 Baterai" }
+];
+
+const board = document.getElementById("gameBoard");
+
+let firstCard = null;
+let lock = false;
+let matchedCount = 0;
+
+// shuffle
+cardsData.sort(() => Math.random() - 0.5);
+
+// render kartu
+cardsData.forEach((item) => {
+  const div = document.createElement("div");
+  div.classList.add("card");
+
+  div.dataset.front = item.name;
+  div.dataset.pair = item.pair;
+
+  div.innerText = "";
+
+  div.addEventListener("click", () => {
+    if (lock || div.classList.contains("matched")) return;
+    if (div === firstCard) return;
+
+    div.classList.add("open");
+    div.innerText = div.dataset.front;
+
+    if (!firstCard) {
+      firstCard = div;
+      return;
+    }
+
+    lock = true;
+
+    // CEK MATCH
+    if (
+      firstCard.dataset.front === div.dataset.pair ||
+      firstCard.dataset.pair === div.dataset.front
+    ) {
+      setTimeout(() => {
+        firstCard.classList.add("matched");
+        div.classList.add("matched");
+
+        matchedCount += 2;
+
+        firstCard = null;
+        lock = false;
+
+        checkWin();
+      }, 300);
+    } else {
+      setTimeout(() => {
+        firstCard.classList.remove("open");
+        div.classList.remove("open");
+
+        firstCard.innerText = "";
+        div.innerText = "";
+
+        firstCard = null;
+        lock = false;
+      }, 700);
+    }
+  });
+
+  board.appendChild(div);
+});
+
+
+// 🎉 CEK SELESAI GAME
+function checkWin() {
+  if (matchedCount === cardsData.length) {
+    setTimeout(() => {
+      Swal.fire({
+        icon: 'success',
+        title: '🎉 Selamat!',
+        text: 'Kamu berhasil mencocokkan semua kartu!',
+        confirmButtonText: 'Main Lagi 🔄'
+      }).then(() => {
+        location.reload();
+      });
+    }, 500);
+  }
+}
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const themeBtn = document.getElementById("theme-toggle");
+
+  if (!themeBtn) return;
+
+  themeBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+
+    themeBtn.textContent = document.body.classList.contains("dark")
+      ? "☀️"
+      : "🌙";
+  });
+});
+</script>
+
+</html>

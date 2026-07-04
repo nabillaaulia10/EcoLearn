@@ -1,0 +1,1312 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EcoLearn — Belajar Kelola Sampah dengan Seru</title>
+    <link rel="stylesheet" href="css/style.css?v=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <style>
+    /* INFOGRAFIS INTERAKTIF */
+
+    #infografis .section-header{
+        text-align:left;
+        max-width:700px;
+        margin-bottom:40px;
+    }
+
+    .flip-grid{
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+        gap:25px;
+    }
+
+    .flip-card{
+        width:100%;
+        height:320px;
+        perspective:1000px;
+        cursor:pointer;
+    }
+
+    .flip-card-inner{
+        position:relative;
+        width:100%;
+        height:100%;
+        transition:transform .7s;
+        transform-style:preserve-3d;
+    }
+
+    .flip-card.active .flip-card-inner{
+        transform:rotateY(180deg);
+    }
+
+    .flip-card-front,
+    .flip-card-back{
+        position:absolute;
+        width:100%;
+        height:100%;
+        border-radius:18px;
+        backface-visibility:hidden;
+        -webkit-backface-visibility:hidden;
+        overflow:hidden;
+        box-shadow:0 10px 25px rgba(0,0,0,.08);
+    }
+
+    /*  DEPAN (LIGHT MODE) */
+
+    .flip-card-front{
+        background:#ffffff;
+        color:#1f2937;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        text-align:center;
+        padding:25px;
+        border:1px solid #e5e7eb;
+        transition:.3s;
+    }
+
+    .flip-card:hover .flip-card-front{
+        transform:translateY(-5px);
+    }
+
+    .info-icon{
+        font-size:60px;
+        margin-bottom:15px;
+    }
+
+    .flip-card-front h3{
+        margin:10px 0;
+        color:#1f2937;
+        font-size:22px;
+    }
+
+    .flip-card-front span{
+        color:#6b7280;
+        font-size:14px;
+    }
+
+    /* BELAKANG */
+
+    .flip-card-back{
+        background:linear-gradient(135deg,#2e7d32,#43a047);
+        color:#ffffff;
+        transform:rotateY(180deg);
+        padding:22px;
+        overflow-y:auto;
+    }
+
+    .flip-card-back h3{
+        text-align:center;
+        margin-bottom:18px;
+        font-size:22px;
+    }
+
+    .flip-card-back p{
+        margin-bottom:14px;
+        font-size:14px;
+        line-height:1.6;
+    }
+
+    .flip-card-back b{
+        color:#ffffff;
+    }
+
+    /*  RESPONSIVE*/
+
+    @media (max-width:768px){
+
+        .flip-grid{
+            grid-template-columns:repeat(2,1fr);
+        }
+
+        .flip-card{
+            height:300px;
+        }
+
+    }
+
+    @media (max-width:500px){
+
+        .flip-grid{
+            grid-template-columns:1fr;
+        }
+
+    }
+
+    /*  DARK MODE */
+
+    [data-theme="dark"] #infografis .section-title,
+    [data-theme="dark"] #infografis .section-subtitle,
+    [data-theme="dark"] #infografis .section-label{
+        color:#ffffff;
+    }
+
+    [data-theme="dark"] .flip-card-front{
+        background:#1f2937;
+        color:#ffffff;
+        border:1px solid rgba(255,255,255,.08);
+    }
+
+    [data-theme="dark"] .flip-card-front h3{
+        color:#ffffff;
+    }
+
+    [data-theme="dark"] .flip-card-front span{
+        color:#cbd5e1;
+    }
+
+    [data-theme="dark"] .flip-card-back{
+        background:linear-gradient(135deg,#166534,#22c55e);
+    }
+
+
+  /* ======LANGKAH MEMILAH SAMPAH ========== */
+
+  .step-grid{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:20px;
+    margin-top:50px;
+  }
+
+  .step-card{
+  width:190px;
+  min-height:200px;
+  background:#fff;
+  border-radius:18px;
+  padding:20px;
+  text-align:center;
+  cursor:pointer;
+  box-shadow:0 10px 20px rgba(0,0,0,.08);
+  transition:.3s;
+  }
+
+  .step-card:hover{
+    transform:translateY(-8px);
+  }
+
+  .step-icon{
+    font-size:50px;
+    margin-bottom:15px;
+  }
+
+  .step-card h3{
+    font-size:18px;
+    margin-bottom:15px;
+
+  }
+
+  .step-detail{
+    display:none;
+    font-size:14px;
+    line-height:1.6;
+    color:#555;
+    margin-top:15px;
+  }
+
+  .step-card.active .step-detail{
+    display:block;
+  }
+
+  .step-arrow{
+    font-size:32px;
+    font-weight:bold;
+    color:#2e7d32;
+  }
+
+  [data-theme="dark"] .step-card{
+    background:#1f2937;
+    color:#fff;
+    border:1px solid rgba(255,255,255,.08);
+  }
+
+  [data-theme="dark"] .step-detail{
+    color:#cbd5e1;
+  }
+
+  @media(max-width:900px){
+    .step-grid{
+      flex-direction:column;
+    }
+
+    .step-arrow{
+      transform:rotate(90deg);
+    }
+  }
+
+  /* ===ECO TIPS===== */
+
+  #eco-tips{
+      padding:90px 0;
+  }
+
+  .eco-slider{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:20px;
+      margin-top:40px;
+  }
+
+  .eco-card{
+      width:100%;
+      max-width:650px;
+      background:var(--card-bg,#ffffff);
+      border-radius:20px;
+      padding:40px;
+      text-align:center;
+      box-shadow:0 15px 35px rgba(0,0,0,.08);
+      transition:.3s;
+  }
+
+  .eco-card:hover{
+      transform:translateY(-5px);
+  }
+
+  .eco-icon{
+      font-size:60px;
+      margin-bottom:20px;
+  }
+
+  .eco-card h3{
+      font-size:28px;
+      margin-bottom:15px;
+  }
+
+  .eco-card p{
+      line-height:1.8;
+      color:var(--text-secondary,#666);
+  }
+
+  .eco-prev,
+  .eco-next{
+      width:50px;
+      height:50px;
+      border:none;
+      border-radius:50%;
+      background:#22c55e;
+      color:#fff;
+      cursor:pointer;
+      font-size:22px;
+      transition:.3s;
+  }
+
+  .eco-prev:hover,
+  .eco-next:hover{
+      background:#16a34a;
+      transform:scale(1.05);
+  }
+
+  .eco-dots{
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      margin-top:25px;
+  }
+
+  .eco-dots span{
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      background:#d1d5db;
+      cursor:pointer;
+      transition:.3s;
+  }
+
+  .eco-dots span.active{
+      background:#22c55e;
+      transform:scale(1.2);
+  }
+
+  /*  DARK MODE */
+
+  [data-theme="dark"] .eco-card{
+      background:#1f2937;
+      color:#ffffff;
+      border:1px solid rgba(255,255,255,.08);
+  }
+
+  [data-theme="dark"] .eco-card p{
+      color:#cbd5e1;
+  }
+
+  [data-theme="dark"] .eco-dots span{
+      background:#475569;
+  }
+
+  [data-theme="dark"] .eco-dots span.active{
+      background:#22c55e;
+  }
+
+  /*  RESPONSIVE */
+
+  @media(max-width:768px){
+  .eco-slider{
+      flex-direction:column;
+  }
+
+  .eco-prev,
+  .eco-next{
+      width:45px;
+      height:45px;
+  }
+
+  .eco-card{
+      padding:30px;
+  }
+
+}
+  </style>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <a href="index.html" class="nav-logo">
+        <span class="logo-icon">♻️</span> EcoLearn
+      </a>
+
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#edukasi">📚 Edukasi</a></li>
+        <li><a href="#dampak">⚠️ Dampak</a></li>
+        <li><a href="#solusi">💡 Solusi</a></li>
+        <li><a href="#games" class="nav-cta">🎮 Main Sekarang</a></li>
+      </ul>
+      <div class="navbar-right">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Ganti tema">
+          🌙
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Buka menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-bg-circles"></div>
+      <div class="hero-badge">🌍 Platform Edukasi Lingkungan</div>
+      <h1>
+        Belajar Kelola <span class="accent">Sampah</span><br />dengan Cara yang
+        Seru
+      </h1>
+      <p class="hero-desc">
+        Pahami jenis-jenis sampah, dampaknya bagi lingkungan, dan cara
+        mengelolanya dengan benar. Lalu uji pemahamanmu lewat kuis dan game
+        interaktif!
+      </p>
+      <div class="hero-actions">
+        <a href="#edukasi" class="btn-primary">📖 Mulai Belajar</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <strong>185 Juta</strong>
+          <span>ton sampah/tahun di Indonesia</span>
+        </div>
+        <div class="hero-stat">
+          <strong>3 Jenis</strong>
+          <span>kategori utama sampah</span>
+        </div>
+        <div class="hero-stat">
+          <strong>500 Tahun</strong>
+          <span>plastik terurai di alam</span>
+        </div>
+        <div class="hero-stat">
+          <strong>3R</strong>
+          <span>prinsip dasar pengelolaan</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 1: JENIS SAMPAH -->
+    <section class="section" id="edukasi">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">📚 Edukasi Dasar</span>
+          <h2 class="section-title">Kenali Jenis-Jenis Sampah</h2>
+          <p class="section-subtitle">
+            Sebelum bisa memilah, kamu harus tahu dulu apa perbedaan
+            masing-masing jenis sampah.
+          </p>
+        </div>
+
+        <div class="waste-grid">
+          <div class="waste-card organik">
+            <div class="waste-icon">🌿</div>
+            <h3>Sampah Organik</h3>
+            <p>
+              Sampah yang berasal dari makhluk hidup dan dapat terurai secara
+              alami oleh mikroorganisme di tanah.
+            </p>
+            <div class="waste-examples">
+              <span class="waste-tag">Sisa makanan</span>
+              <span class="waste-tag">Daun gugur</span>
+              <span class="waste-tag">Kulit buah</span>
+              <span class="waste-tag">Ranting pohon</span>
+            </div>
+          </div>
+
+          <div class="waste-card anorganik">
+            <div class="waste-icon">🧴</div>
+            <h3>Sampah Anorganik</h3>
+            <p>
+              Sampah yang berasal dari bahan non-hayati seperti plastik dan
+              logam. Sulit atau sangat lama terurai di alam.
+            </p>
+            <div class="waste-examples">
+              <span class="waste-tag">Botol plastik</span>
+              <span class="waste-tag">Kaleng</span>
+              <span class="waste-tag">Kaca</span>
+              <span class="waste-tag">Styrofoam</span>
+            </div>
+          </div>
+
+          <div class="waste-card b3">
+            <div class="waste-icon">☢️</div>
+            <h3>Sampah B3</h3>
+            <p>
+              Bahan Berbahaya dan Beracun. Mengandung zat kimia berbahaya yang
+              dapat mencemari lingkungan dan merusak kesehatan.
+            </p>
+            <div class="waste-examples">
+              <span class="waste-tag">Baterai bekas</span>
+              <span class="waste-tag">Lampu neon</span>
+              <span class="waste-tag">Oli bekas</span>
+              <span class="waste-tag">Obat kedaluwarsa</span>
+            </div>
+          </div>
+
+          <div class="waste-card daur-ulang">
+            <div class="waste-icon">♻️</div>
+            <h3>Sampah Daur Ulang</h3>
+            <p>
+              Sampah yang masih dapat diproses kembali menjadi bahan baku produk
+              baru. Bernilai ekonomis jika dipilah dengan benar.
+            </p>
+            <div class="waste-examples">
+              <span class="waste-tag">Kertas</span>
+              <span class="waste-tag">Karton</span>
+              <span class="waste-tag">Botol PET</span>
+              <span class="waste-tag">Aluminium</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!--Infografis Interaktif-->
+    <section class="section" id="infografis">
+      <div class="container">
+
+        <div class="section-header">
+          <span class="section-label">📊 Infografis Interaktif</span>
+
+          <p class="section-subtitle">
+            Kenali berbagai jenis sampah beserta lama terurai, dampak, dan cara pengelolaannya.
+          </p>
+        </div>
+
+        <div class="flip-grid">
+
+          <!-- Plastik -->
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <div class="info-icon">🧴</div>
+                <h3>Plastik</h3>
+              </div>
+
+              <div class="flip-card-back">
+                <h3>🧴 Plastik</h3>
+                <p><b>⏳ Terurai</b><br>±450 Tahun</p>
+                <p><b>⚠️ Dampak</b><br>Mencemari laut & tanah.</p>
+                <p><b>♻️ Kelola</b><br>Daur ulang.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Organik -->
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <div class="info-icon">🍌</div>
+                <h3>Organik</h3>
+              </div>
+
+              <div class="flip-card-back">
+                <h3>🍌 Organik</h3>
+                <p><b>⏳ Terurai</b><br>1–6 Bulan</p>
+                <p><b>⚠️ Dampak</b><br>Menimbulkan bau jika menumpuk.</p>
+                <p><b>♻️ Kelola</b><br>Kompos.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kertas -->
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <div class="info-icon">📄</div>
+                <h3>Kertas</h3>
+              </div>
+
+              <div class="flip-card-back">
+                <h3>📄 Kertas</h3>
+                <p><b>⏳ Terurai</b><br>2–5 Bulan</p>
+                <p><b>⚠️ Dampak</b><br>Menambah volume sampah.</p>
+                <p><b>♻️ Kelola</b><br>Daur ulang.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kaleng -->
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <div class="info-icon">🥫</div>
+                <h3>Kaleng</h3>
+              </div>
+
+              <div class="flip-card-back">
+                <h3>🥫 Kaleng</h3>
+                <p><b>⏳ Terurai</b><br>50–100 Tahun</p>
+                <p><b>⚠️ Dampak</b><br>Mencemari lingkungan.</p>
+                <p><b>♻️ Kelola</b><br>Bank Sampah.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kaca -->
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <div class="info-icon">🍾</div>
+                <h3>Kaca</h3>
+              </div>
+
+              <div class="flip-card-back">
+                <h3>🍾 Kaca</h3>
+                <p><b>⏳ Terurai</b><br>>1 Juta Tahun</p>
+                <p><b>⚠️ Dampak</b><br>Berbahaya jika pecah.</p>
+                <p><b>♻️ Kelola</b><br>Daur ulang.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- B3 -->
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <div class="info-icon">🔋</div>
+                <h3>B3</h3>
+              </div>
+
+              <div class="flip-card-back">
+                <h3>🔋 Sampah B3</h3>
+                <p><b>⏳ Terurai</b><br>100+ Tahun</p>
+                <p><b>⚠️ Dampak</b><br>Mengandung zat berbahaya.</p>
+                <p><b>♻️ Kelola</b><br>Drop Box B3.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="langkah">
+
+        <div class="container">
+
+            <div class="section-header">
+                <span class="section-label">♻️ Panduan</span>
+
+                <h2 class="section-title">
+                    Langkah Memilah Sampah
+                </h2>
+
+                <p class="section-subtitle">
+                    Ikuti langkah sederhana berikut agar sampah dapat dikelola dengan benar.
+                </p>
+            </div>
+
+            <div class="step-grid">
+
+                <div class="step-card active">
+                    <div class="step-icon">🗑️</div>
+                    <h3>Buang Sampah</h3>
+
+                    <div class="step-detail">
+                        Mulailah dengan mengumpulkan sampah setelah digunakan.
+                    </div>
+                </div>
+
+                <div class="step-arrow">➜</div>
+
+                <div class="step-card">
+                    <div class="step-icon">🧺</div>
+                    <h3>Pisahkan Jenisnya</h3>
+
+                    <div class="step-detail">
+                        <b>Organik</b><br>
+                        <b>Anorganik</b><br>
+                        <b>B3</b>
+                    </div>
+                </div>
+
+                <div class="step-arrow">➜</div>
+
+                <div class="step-card">
+                    <div class="step-icon">♻️</div>
+                    <h3>Masukkan ke Tempat yang Tepat</h3>
+
+                    <div class="step-detail">
+                        🟢 Hijau = Organik<br>
+                        🟡 Kuning = Anorganik<br>
+                        🔴 Merah = B3
+                    </div>
+                </div>
+
+                <div class="step-arrow">➜</div>
+
+                <div class="step-card">
+                    <div class="step-icon">🏭</div>
+                    <h3>Proses Daur Ulang</h3>
+
+                    <div class="step-detail">
+                        Sampah yang masih bernilai akan diproses menjadi bahan baru.
+                    </div>
+                </div>
+
+                <div class="step-arrow">➜</div>
+
+                <div class="step-card">
+                    <div class="step-icon">🌱</div>
+                    <h3>Menjadi Produk Baru</h3>
+
+                    <div class="step-detail">
+                        Contohnya pot bunga, tas daur ulang, kompos, dan kerajinan.
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- SECTION 2: DAMPAK SAMPAH -->
+    <section class="section section-alt" id="dampak">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">⚠️ Dampak Nyata</span>
+          <h2 class="section-title">
+            Apa yang Terjadi Jika Sampah Tidak Dikelola?
+          </h2>
+          <p class="section-subtitle">
+            Penumpukan sampah bukan sekadar masalah estetika. Dampaknya jauh
+            lebih serius dari yang kamu bayangkan.
+          </p>
+        </div>
+
+        <div class="impact-grid">
+          <div class="impact-card health">
+            <div class="impact-icon-wrap">🦟</div>
+            <div>
+              <h4>Penyebaran Penyakit</h4>
+              <p>
+                Timbunan sampah menjadi sarang nyamuk Aedes (DBD), tikus
+                (leptospirosis), dan lalat yang menyebarkan diare dan tifus.
+              </p>
+            </div>
+          </div>
+
+          <div class="impact-card water">
+            <div class="impact-icon-wrap">💧</div>
+            <div>
+              <h4>Pencemaran Air</h4>
+              <p>
+                Lindi (cairan sampah) meresap ke tanah dan mencemari air tanah.
+                Sampah di sungai merusak ekosistem akuatik dan sumber air bersih
+                warga.
+              </p>
+            </div>
+          </div>
+
+          <div class="impact-card climate">
+            <div class="impact-icon-wrap">🌡️</div>
+            <div>
+              <h4>Perubahan Iklim</h4>
+              <p>
+                Sampah organik di TPA menghasilkan gas metana (CH₄) yang 25×
+                lebih kuat dari CO₂ dalam menyebabkan efek rumah kaca.
+              </p>
+            </div>
+          </div>
+
+          <div class="impact-card flood">
+            <div class="impact-icon-wrap">🌊</div>
+            <div>
+              <h4>Banjir & Longsor</h4>
+              <p>
+                Sampah menyumbat saluran drainase sehingga air tidak bisa
+                mengalir. Di daerah lereng, tumpukan sampah memicu longsor saat
+                hujan deras.
+              </p>
+            </div>
+          </div>
+
+          <div class="impact-card water">
+            <div class="impact-icon-wrap">🐢</div>
+            <div>
+              <h4>Kerusakan Laut</h4>
+              <p>
+                Indonesia adalah penghasil sampah plastik laut terbesar kedua di
+                dunia. Plastik laut membunuh penyu, ikan, dan terumbu karang.
+              </p>
+            </div>
+          </div>
+
+          <div class="impact-card health">
+            <div class="impact-icon-wrap">🌱</div>
+            <div>
+              <h4>Rusaknya Kualitas Tanah</h4>
+              <p>
+                Plastik dan bahan kimia dari sampah B3 yang terurai perlahan
+                meracuni tanah dan membuat lahan tidak subur untuk pertanian.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION VIDEO: DAMPAK SAMPAH -->
+    <section class="section video-section">
+      <div class="container">
+        <div class="section-header centered">
+          <span class="section-label">🎬 Tonton & Pahami</span>
+          <h2 class="section-title">Video Edukasi: Dampak Sampah</h2>
+          <p class="section-subtitle">
+            Saksikan bagaimana sampah yang tidak dikelola berdampak nyata bagi lingkungan, kesehatan, dan kehidupan makhluk hidup di sekitar kita.
+          </p>
+        </div>
+        <div class="video-grid">
+          <div class="video-card">
+            <div class="video-wrapper">
+              <iframe
+                src="https://www.youtube.com/embed/CGd3lgxReFE"
+                title="Animasi Cara Pengelolaan Sampah - Sampahku Tanggung Jawabku"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+            <div class="video-info">
+              <span class="video-tag">🗑️ Dampak & Tanggung Jawab</span>
+              <h3>Sampahku Tanggung Jawabku</h3>
+              <p>Animasi edukasi tentang dampak buruk sampah bagi lingkungan dan kesehatan, serta pentingnya tanggung jawab pribadi dalam pengelolaan sampah.</p>
+              <a
+                href="https://www.youtube.com/watch?v=CGd3lgxReFE"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="video-source"
+              >▶ Tonton di YouTube</a>
+            </div>
+          </div>
+          <div class="video-card">
+            <div class="video-wrapper">
+              <iframe
+                src="https://www.youtube.com/embed/KKESeJNV1I0"
+                title="Video Animasi Edukasi Dampak Pencemaran Lingkungan Pantai"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+            <div class="video-info">
+              <span class="video-tag">🌊 Pencemaran Laut</span>
+              <h3>Dampak Pencemaran Lingkungan Pantai</h3>
+              <p>Video animasi edukasi yang menggambarkan dampak nyata pencemaran sampah plastik terhadap ekosistem pantai dan kehidupan laut.</p>
+              <a
+                href="https://www.youtube.com/watch?v=KKESeJNV1I0"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="video-source"
+              >▶ Tonton di YouTube</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: PRINSIP 3R -->
+    <section class="section" id="solusi">
+      <div class="container">
+        <div class="section-header centered">
+          <span class="section-label">💡 Solusi</span>
+          <h2 class="section-title">Prinsip 3R — Kunci Atasi Sampah</h2>
+          <p class="section-subtitle">
+            Tiga langkah sederhana yang bisa kamu terapkan setiap hari untuk
+            mengurangi dampak sampah terhadap lingkungan.
+          </p>
+        </div>
+
+        <div class="r3-grid">
+          <div class="r3-card reduce">
+            <div class="r3-letter">R1</div>
+            <h3>Reduce</h3>
+            <p>
+              Kurangi penggunaan barang yang berpotensi menjadi sampah sejak
+              dari sumbernya.
+            </p>
+            <ul class="r3-examples">
+              <li>Bawa tumbler sendiri, hindari gelas plastik</li>
+              <li>Beli produk dengan kemasan minimal</li>
+              <li>Gunakan tas belanja kain</li>
+              <li>Cetak dokumen hanya jika perlu</li>
+            </ul>
+          </div>
+
+          <div class="r3-card reuse">
+            <div class="r3-letter">R2</div>
+            <h3>Reuse</h3>
+            <p>
+              Gunakan kembali barang yang masih layak pakai tanpa mengubah
+              bentuknya.
+            </p>
+            <ul class="r3-examples">
+              <li>Botol kaca sebagai wadah penyimpanan</li>
+              <li>Kaleng bekas sebagai pot tanaman</li>
+              <li>Pakaian lama disumbangkan</li>
+              <li>Kertas bekas untuk catatan</li>
+            </ul>
+          </div>
+
+          <div class="r3-card recycle">
+            <div class="r3-letter">R3</div>
+            <h3>Recycle</h3>
+            <p>
+              Olah sampah menjadi bahan baku baru melalui proses daur ulang
+              industri atau rumahan.
+            </p>
+            <ul class="r3-examples">
+              <li>Pisahkan kertas, plastik, dan logam</li>
+              <li>Buat kompos dari sisa organik</li>
+              <li>Setorkan ke bank sampah terdekat</li>
+              <li>Ikuti program daur ulang brand</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION VIDEO: SOLUSI PENGELOLAAN SAMPAH -->
+    <section class="section section-alt video-section">
+      <div class="container">
+        <div class="section-header centered">
+          <span class="section-label">🎬 Yuk Tonton!</span>
+          <h2 class="section-title">Video Edukasi: Solusi Pengelolaan Sampah</h2>
+          <p class="section-subtitle">
+            Belajar cara memilah sampah dan menerapkan prinsip 3R lewat video animasi kartun yang menyenangkan dan mudah dipahami.
+          </p>
+        </div>
+        <div class="video-grid">
+          <div class="video-card">
+            <div class="video-wrapper">
+              <iframe
+                src="https://www.youtube.com/embed/ZKJ6ltmjcfU"
+                title="Membuang Sampah Sembarangan Bukan Kebiasaan Baik - BabyBus"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+            <div class="video-info">
+              <span class="video-tag">♻️ Kebiasaan Baik</span>
+              <h3>Bukan Kebiasaan Baik: Buang Sampah Sembarangan</h3>
+              <p>Animasi kartun BabyBus yang mengajarkan anak dan keluarga untuk membuang sampah pada tempatnya dan membentuk kebiasaan peduli lingkungan sejak dini.</p>
+              <a
+                href="https://www.youtube.com/watch?v=ZKJ6ltmjcfU"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="video-source"
+              >▶ Tonton di YouTube</a>
+            </div>
+          </div>
+          <div class="video-card">
+            <div class="video-wrapper">
+              <iframe
+                src="https://www.youtube.com/embed/hm_YcVfZ_OQ"
+                title="Jangan Buang Sampah Sembarangan - BabyBus Bahasa Indonesia"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+            <div class="video-info">
+              <span class="video-tag">🌿 Peduli Lingkungan</span>
+              <h3>Jangan Buang Sampah Sembarangan!</h3>
+              <p>Kartun edukasi BabyBus Bahasa Indonesia yang menunjukkan kebiasaan baik dalam menjaga kebersihan lingkungan dan tidak membuang sampah sembarangan.</p>
+              <a
+                href="https://www.youtube.com/watch?v=hm_YcVfZ_OQ"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="video-source"
+              >▶ Tonton di YouTube</a>
+            </div>
+          </div>
+        </div>
+        <p class="video-credit">
+          📌 Sumber video: <a href="https://www.youtube.com/@BabyBusBahasaIndonesia" target="_blank" rel="noopener noreferrer">BabyBus Bahasa Indonesia</a> &amp; kreator edukasi lingkungan di YouTube. Hak cipta milik masing-masing pemilik konten.
+        </p>
+      </div>
+    </section>
+
+    <!-- SECTION 4: TIPS PILAH SAMPAH -->
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">📋 Tips Praktis</span>
+          <h2 class="section-title">Cara Memilah Sampah di Rumah</h2>
+          <p class="section-subtitle">
+            Mulai dari langkah kecil yang konsisten. Pemilahan sampah yang benar
+            adalah fondasi pengelolaan lingkungan yang baik.
+          </p>
+        </div>
+
+        <div class="tips-grid">
+          <div class="tip-card">
+            <div class="tip-num">1</div>
+            <p>
+              Sediakan minimal <strong>3 tempat sampah</strong> berbeda:
+              organik, anorganik, dan B3 di rumahmu.
+            </p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-num">2</div>
+            <p>
+              <strong>Cuci bersih</strong> wadah makanan dan botol plastik
+              sebelum dibuang agar tidak berbau dan mudah didaur ulang.
+            </p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-num">3</div>
+            <p>
+              Buat <strong>kompos rumahan</strong> dari sisa sayuran, kulit
+              buah, dan daun kering. Pupuknya bisa untuk tanaman di rumah.
+            </p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-num">4</div>
+            <p>
+              Setor sampah anorganik ke <strong>bank sampah</strong> terdekat.
+              Selain lingkungan terjaga, kamu juga bisa dapat uang tambahan.
+            </p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-num">5</div>
+            <p>
+              Baterai, obat kedaluwarsa, dan lampu neon jangan dibuang
+              sembarangan. Cari <strong>drop box B3</strong> di apotek atau
+              minimarket terdekat.
+            </p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-num">6</div>
+            <p>
+              <strong>Kurangi plastik sekali pakai</strong> mulai dari sedotan,
+              kantong kresek, dan bungkus makanan. Pilih alternatif yang bisa
+              dipakai ulang.
+            </p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-num">7</div>
+            <p>
+              Ajak anggota keluarga dan tetangga untuk ikut memilah sampah.
+              <strong>Perubahan kolektif</strong> jauh lebih berdampak dari satu
+              orang saja.
+            </p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-num">8</div>
+            <p>
+              Ikuti program
+              <strong>extended producer responsibility</strong> dari brand
+              favoritmu — banyak yang menerima kembali kemasan bekas untuk
+              didaur ulang.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="section" id="eco-tips">
+
+        <div class="container">
+
+            <div class="section-header">
+                <span class="section-label">💡 Eco Tips</span>
+
+                <h2 class="section-title">
+                    Tips Ramah Lingkungan
+                </h2>
+
+                <p class="section-subtitle">
+                    Mulailah dari kebiasaan kecil untuk menciptakan lingkungan yang lebih bersih.
+                </p>
+            </div>
+
+            <div class="eco-slider">
+
+                <button type="button" class="eco-prev">
+                    &#10094;
+                </button>
+
+                <div class="eco-card">
+
+                    <div class="eco-icon" id="tipsIcon">🌱</div>
+
+                    <h3 id="tipsTitle">Gunakan Tas Belanja</h3>
+
+                    <p id="tipsText">
+                        Kurangi penggunaan kantong plastik dengan membawa tas belanja sendiri.
+                    </p>
+
+                </div>
+
+                <button type="button" class="eco-next">
+                    &#10095;
+                </button>
+
+            </div>
+
+            <div class="eco-dots" id="tipsDots"></div>
+
+        </div>
+
+    </section>
+
+    <!-- SECTION 5: GAMES CTA -->
+    <section class="games-section" id="games">
+      <div class="section-label">🎮 Uji Pemahamanmu</div>
+      <h2 class="section-title" style="margin: 0.5rem 0 0.75rem">
+        Sudah Belajar? Sekarang Waktunya Main!
+      </h2>
+      <p class="section-subtitle">
+        Dua game seru untuk menguji seberapa paham kamu soal sampah dan
+        lingkungan.
+      </p>
+
+      <div class="games-cards">
+        <div class="game-feature-card">
+          <div class="game-icon">🧠</div>
+          <h3>Kuis Sampah</h3>
+          <p>
+            10 pertanyaan pilihan ganda tentang jenis sampah, dampak lingkungan,
+            dan prinsip 3R. Berapa skormu?
+          </p>
+          <a href="kuis-game.html" class="btn-game-white">Mulai Kuis →</a>
+        </div>
+
+        <div class="game-feature-card">
+          <div class="game-icon">🗑️</div>
+          <h3>Game Drag-Drop</h3>
+          <p>
+            Seret dan taruh sampah ke tong yang benar! Uji refleks dan
+            pengetahuan pilah-sampahmu secara visual.
+          </p>
+          <a href="dragdrop-game.html" class="btn-game-white"
+            >Main Sekarang →</a
+          >
+        </div>
+
+        <div class="game-feature-card">
+          <div class="game-icon">🃏</div>
+          <h3>Memory Card</h3>
+          <p>
+            Buka kartu dan cari pasangan yang sesuai antara jenis sampah dan waktu terurainya.
+            
+          </p>
+          <a href="Memory_Card.html" class="btn-game-white"
+            >Main Sekarang →</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footer-logo">♻️ EcoLearn</div>
+      <p>
+        Platform edukasi pengelolaan sampah untuk generasi peduli lingkungan.
+      </p>
+      <br />
+      <p style="font-size: 0.8rem">
+        Dibuat dengan 💚 untuk bumi yang lebih baik
+      </p>
+    </footer>
+    <script src="js/index.js?v=1"></script>
+  </body>
+
+  <script>
+    // Infografis Interaktif
+    document.querySelectorAll(".flip-card").forEach(card=>{
+
+      card.addEventListener("click",function(){
+
+      this.classList.toggle("active");
+
+      });
+
+    });
+
+
+  //langkah langkah memilih sampah
+
+    document.querySelectorAll(".step-card").forEach(card=>{
+
+      card.addEventListener("click",()=>{
+
+      document.querySelectorAll(".step-card").forEach(c=>{
+
+      if(c!==card){
+
+      c.classList.remove("active");
+
+      }
+
+    });
+
+    card.classList.toggle("active");
+
+    });
+
+  });
+
+
+  // ECO TIPS
+
+  const ecoTips = [
+
+  {
+    icon:"🌱",
+    title:"Gunakan Tas Belanja",
+    text:"Kurangi penggunaan kantong plastik dengan membawa tas belanja yang dapat digunakan kembali."
+  },
+
+  {
+    icon:"🥤",
+    title:"Gunakan Tumbler",
+    text:"Bawalah botol minum sendiri agar mengurangi sampah botol plastik sekali pakai."
+  },
+
+  {
+    icon:"♻️",
+    title:"Pisahkan Sampah",
+    text:"Pisahkan sampah organik, anorganik, dan B3 agar lebih mudah dikelola."
+  },
+
+  {
+    icon:"🍌",
+    title:"Buat Kompos",
+    text:"Manfaatkan sisa makanan dan daun kering menjadi kompos untuk tanaman."
+  },
+
+  {
+    icon:"📄",
+    title:"Gunakan Kertas Secukupnya",
+    text:"Gunakan kedua sisi kertas sebelum membuangnya untuk mengurangi limbah."
+  }
+
+  ];
+
+  let currentTip = 0;
+
+  const ecoIcon = document.getElementById("tipsIcon");
+  const ecoTitle = document.getElementById("tipsTitle");
+  const ecoText = document.getElementById("tipsText");
+  const ecoDots = document.getElementById("tipsDots");
+
+  function showEcoTip(index){
+
+      ecoIcon.textContent = ecoTips[index].icon;
+      ecoTitle.textContent = ecoTips[index].title;
+      ecoText.textContent = ecoTips[index].text;
+
+      document.querySelectorAll(".eco-dots span").forEach((dot,i)=>{
+
+          dot.classList.toggle("active",i===index);
+
+      });
+
+  }
+
+  ecoTips.forEach((_,i)=>{
+
+      const dot=document.createElement("span");
+
+      dot.addEventListener("click",()=>{
+
+          currentTip=i;
+
+          showEcoTip(currentTip);
+
+      });
+
+      ecoDots.appendChild(dot);
+
+  });
+
+  showEcoTip(currentTip);
+
+  document.querySelector(".eco-next").addEventListener("click",(e)=>{
+
+      e.preventDefault();
+
+      currentTip++;
+
+      if(currentTip>=ecoTips.length){
+
+          currentTip=0;
+
+      }
+
+      showEcoTip(currentTip);
+
+  });
+
+  document.querySelector(".eco-prev").addEventListener("click",(e)=>{
+
+      e.preventDefault();
+
+      currentTip--;
+
+      if(currentTip<0){
+
+          currentTip=ecoTips.length-1;
+
+      }
+
+      showEcoTip(currentTip);
+
+  });
+
+
+
+
+  </script>
+</html>
