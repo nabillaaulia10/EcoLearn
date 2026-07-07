@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>EcoLearn — Belajar Kelola Sampah dengan Seru</title>
     <link rel="stylesheet" href="css/style.css?v=1">
+    <link rel="stylesheet" href="css/index.css
+    ">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
@@ -12,364 +14,7 @@
     />
   </head>
 
-  <style>
-    /* INFOGRAFIS INTERAKTIF */
 
-    #infografis .section-header{
-        text-align:left;
-        max-width:700px;
-        margin-bottom:40px;
-    }
-
-    .flip-grid{
-        display:grid;
-        grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-        gap:25px;
-    }
-
-    .flip-card{
-        width:100%;
-        height:320px;
-        perspective:1000px;
-        cursor:pointer;
-    }
-
-    .flip-card-inner{
-        position:relative;
-        width:100%;
-        height:100%;
-        transition:transform .7s;
-        transform-style:preserve-3d;
-    }
-
-    .flip-card.active .flip-card-inner{
-        transform:rotateY(180deg);
-    }
-
-    .flip-card-front,
-    .flip-card-back{
-        position:absolute;
-        width:100%;
-        height:100%;
-        border-radius:18px;
-        backface-visibility:hidden;
-        -webkit-backface-visibility:hidden;
-        overflow:hidden;
-        box-shadow:0 10px 25px rgba(0,0,0,.08);
-    }
-
-    /*  DEPAN (LIGHT MODE) */
-
-    .flip-card-front{
-        background:#ffffff;
-        color:#1f2937;
-        display:flex;
-        flex-direction:column;
-        justify-content:center;
-        align-items:center;
-        text-align:center;
-        padding:25px;
-        border:1px solid #e5e7eb;
-        transition:.3s;
-    }
-
-    .flip-card:hover .flip-card-front{
-        transform:translateY(-5px);
-    }
-
-    .info-icon{
-        font-size:60px;
-        margin-bottom:15px;
-    }
-
-    .flip-card-front h3{
-        margin:10px 0;
-        color:#1f2937;
-        font-size:22px;
-    }
-
-    .flip-card-front span{
-        color:#6b7280;
-        font-size:14px;
-    }
-
-    /* BELAKANG */
-
-    .flip-card-back{
-        background:linear-gradient(135deg,#2e7d32,#43a047);
-        color:#ffffff;
-        transform:rotateY(180deg);
-        padding:22px;
-        overflow-y:auto;
-    }
-
-    .flip-card-back h3{
-        text-align:center;
-        margin-bottom:18px;
-        font-size:22px;
-    }
-
-    .flip-card-back p{
-        margin-bottom:14px;
-        font-size:14px;
-        line-height:1.6;
-    }
-
-    .flip-card-back b{
-        color:#ffffff;
-    }
-
-    /*  RESPONSIVE*/
-
-    @media (max-width:768px){
-
-        .flip-grid{
-            grid-template-columns:repeat(2,1fr);
-        }
-
-        .flip-card{
-            height:300px;
-        }
-
-    }
-
-    @media (max-width:500px){
-
-        .flip-grid{
-            grid-template-columns:1fr;
-        }
-
-    }
-
-    /*  DARK MODE */
-
-    [data-theme="dark"] #infografis .section-title,
-    [data-theme="dark"] #infografis .section-subtitle,
-    [data-theme="dark"] #infografis .section-label{
-        color:#ffffff;
-    }
-
-    [data-theme="dark"] .flip-card-front{
-        background:#1f2937;
-        color:#ffffff;
-        border:1px solid rgba(255,255,255,.08);
-    }
-
-    [data-theme="dark"] .flip-card-front h3{
-        color:#ffffff;
-    }
-
-    [data-theme="dark"] .flip-card-front span{
-        color:#cbd5e1;
-    }
-
-    [data-theme="dark"] .flip-card-back{
-        background:linear-gradient(135deg,#166534,#22c55e);
-    }
-
-
-  /* ======LANGKAH MEMILAH SAMPAH ========== */
-
-  .step-grid{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:15px;
-    margin-top:50px;
-  }
-
-  .step-card{
-  width:190px;
-  flex:1;
-  max-width:180px;
-  min-width:140px;
-  min-height:200px;
-  background:#fff;
-  border-radius:18px;
-  padding:20px;
-  text-align:center;
-  cursor:pointer;
-  box-shadow:0 10px 20px rgba(0,0,0,.08);
-  transition:.3s;
-  }
-
-  .step-card:hover{
-    transform:translateY(-8px);
-  }
-
-  .step-icon{
-    font-size:50px;
-    margin-bottom:15px;
-  }
-
-  .step-card h3{
-    font-size:18px;
-    margin-bottom:15px;
-
-  }
-
-  .step-detail{
-    display:none;
-    font-size:14px;
-    line-height:1.6;
-    color:#555;
-    margin-top:15px;
-  }
-
-  .step-card.active .step-detail{
-    display:block;
-  }
-
-  .step-arrow{
-    font-size:32px;
-    font-weight:bold;
-    color:#2e7d32;
-  }
-
-  [data-theme="dark"] .step-card{
-    background:#1f2937;
-    color:#fff;
-    border:1px solid rgba(255,255,255,.08);
-  }
-
-  [data-theme="dark"] .step-detail{
-    color:#cbd5e1;
-  }
-
-  @media(max-width:900px){
-    .step-grid{
-      flex-direction:column;
-    }
-
-    .step-arrow{
-      transform:rotate(90deg);
-    }
-  }
-
-  /* ===ECO TIPS===== */
-
-  #eco-tips{
-      padding:90px 0;
-  }
-
-  .eco-slider{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:20px;
-      margin-top:40px;
-  }
-
-  .eco-card{
-      width:100%;
-      max-width:650px;
-      background:var(--card-bg,#ffffff);
-      border-radius:20px;
-      padding:40px;
-      text-align:center;
-      box-shadow:0 15px 35px rgba(0,0,0,.08);
-      transition:.3s;
-  }
-
-  .eco-card:hover{
-      transform:translateY(-5px);
-  }
-
-  .eco-icon{
-      font-size:60px;
-      margin-bottom:20px;
-  }
-
-  .eco-card h3{
-      font-size:28px;
-      margin-bottom:15px;
-  }
-
-  .eco-card p{
-      line-height:1.8;
-      color:var(--text-secondary,#666);
-  }
-
-  .eco-prev,
-  .eco-next{
-      width:50px;
-      height:50px;
-      border:none;
-      border-radius:50%;
-      background:#22c55e;
-      color:#fff;
-      cursor:pointer;
-      font-size:22px;
-      transition:.3s;
-  }
-
-  .eco-prev:hover,
-  .eco-next:hover{
-      background:#16a34a;
-      transform:scale(1.05);
-  }
-
-  .eco-dots{
-      display:flex;
-      justify-content:center;
-      gap:10px;
-      margin-top:25px;
-  }
-
-  .eco-dots span{
-      width:12px;
-      height:12px;
-      border-radius:50%;
-      background:#d1d5db;
-      cursor:pointer;
-      transition:.3s;
-  }
-
-  .eco-dots span.active{
-      background:#22c55e;
-      transform:scale(1.2);
-  }
-
-  /*  DARK MODE */
-
-  [data-theme="dark"] .eco-card{
-      background:#1f2937;
-      color:#ffffff;
-      border:1px solid rgba(255,255,255,.08);
-  }
-
-  [data-theme="dark"] .eco-card p{
-      color:#cbd5e1;
-  }
-
-  [data-theme="dark"] .eco-dots span{
-      background:#475569;
-  }
-
-  [data-theme="dark"] .eco-dots span.active{
-      background:#22c55e;
-  }
-
-  /*  RESPONSIVE */
-
-  @media(max-width:768px){
-  .eco-slider{
-      flex-direction:column;
-  }
-
-  .eco-prev,
-  .eco-next{
-      width:45px;
-      height:45px;
-  }
-
-  .eco-card{
-      padding:30px;
-  }
-
-}
-  </style>
   <body>
     <!-- NAVBAR -->
     <nav class="navbar">
@@ -792,6 +437,96 @@
       </div>
     </section>
 
+    <!-- SECTION : DAMPAK BUANG SAMPAH SEMBARANGAN -->
+    <section class="section section-alt" id="dampak">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">🚯 Dampak Buang Sampah Sembarangan</span>
+          <h2 class="section-title">
+            Apa Akibat Jika Membuang Sampah Sembarangan?
+          </h2>
+          <p class="section-subtitle">
+            Kebiasaan membuang sampah sembarangan dapat menimbulkan berbagai masalah
+            bagi lingkungan, kesehatan, dan kehidupan masyarakat.
+          </p>
+        </div>
+
+        <div class="impact-grid">
+
+          <div class="impact-card flood">
+            <div class="impact-icon-wrap">🌊</div>
+            <div>
+              <h4>Menyebabkan Banjir</h4>
+              <p>
+                Sampah yang dibuang ke selokan, sungai, atau saluran air dapat
+                menyumbat aliran sehingga air meluap dan menyebabkan banjir saat
+                hujan turun.
+              </p>
+            </div>
+          </div>
+
+          <div class="impact-card health">
+            <div class="impact-icon-wrap">🦟</div>
+            <div>
+              <h4>Menjadi Sarang Penyakit</h4>
+              <p>
+                Tumpukan sampah menjadi tempat berkembang biaknya nyamuk, lalat,
+                dan tikus yang dapat menularkan penyakit seperti DBD, diare,
+                dan leptospirosis.
+              </p>
+            </div>
+          </div>
+
+          <div class="impact-card water">
+            <div class="impact-icon-wrap">💧</div>
+            <div>
+              <h4>Mencemari Air</h4>
+              <p>
+                Sampah yang masuk ke sungai atau danau menurunkan kualitas air,
+                mengganggu kehidupan makhluk air, dan mengurangi ketersediaan air
+                bersih bagi masyarakat.
+              </p>
+            </div>
+          </div>
+
+          <div class="impact-card climate">
+            <div class="impact-icon-wrap">🌍</div>
+            <div>
+              <h4>Mencemari Lingkungan</h4>
+              <p>
+                Lingkungan menjadi kotor, tidak nyaman, dan menimbulkan bau tidak
+                sedap sehingga mengurangi kualitas hidup masyarakat di sekitarnya.
+              </p>
+            </div>
+          </div>
+
+          <div class="impact-card water">
+            <div class="impact-icon-wrap">🐢</div>
+            <div>
+              <h4>Membahayakan Satwa</h4>
+              <p>
+                Hewan dapat terluka atau mati karena memakan plastik maupun
+                terjerat sampah yang dibuang sembarangan, terutama di sungai dan laut.
+              </p>
+            </div>
+          </div>
+
+          <div class="impact-card health">
+            <div class="impact-icon-wrap">♻️</div>
+            <div>
+              <h4>Meningkatkan Volume Sampah</h4>
+              <p>
+                Sampah yang tidak dibuang pada tempatnya sulit dipilah dan didaur
+                ulang sehingga menambah beban pengelolaan sampah dan mencemari
+                lingkungan dalam jangka panjang.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
     <!-- SECTION VIDEO: DAMPAK SAMPAH -->
     <section class="section video-section">
       <div class="container">
@@ -849,6 +584,131 @@
               >▶ Tonton di YouTube</a>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: MITOS VS FAKTA -->
+    <section class="section" id="mitos-fakta">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">🤔 Mitos vs Fakta</span>
+          <h2 class="section-title">
+            Jangan Sampai Salah Paham Tentang Sampah!
+          </h2>
+          <p class="section-subtitle">
+            Banyak informasi yang beredar mengenai sampah. Yuk, bedakan mana yang
+            hanya mitos dan mana yang merupakan fakta berdasarkan pengelolaan
+            lingkungan.
+          </p>
+        </div>
+
+        <div class="myth-grid">
+
+          <div class="myth-card">
+            <div class="myth-title">
+              ❌ Mitos
+            </div>
+            <p>
+              Semua jenis plastik bisa didaur ulang.
+            </p>
+
+            <div class="fact-title">
+              ✅ Fakta
+            </div>
+            <p>
+              Tidak semua plastik dapat didaur ulang. Beberapa jenis plastik hanya
+              dapat diproses di fasilitas khusus, bahkan ada yang tidak bisa didaur
+              ulang sama sekali.
+            </p>
+          </div>
+
+          <div class="myth-card">
+            <div class="myth-title">
+              ❌ Mitos
+            </div>
+            <p>
+              Sampah organik tidak mencemari lingkungan.
+            </p>
+
+            <div class="fact-title">
+              ✅ Fakta
+            </div>
+            <p>
+              Sampah organik yang menumpuk dapat menghasilkan bau, mengundang lalat,
+              dan menghasilkan gas metana yang berkontribusi terhadap pemanasan
+              global.
+            </p>
+          </div>
+
+          <div class="myth-card">
+            <div class="myth-title">
+              ❌ Mitos
+            </div>
+            <p>
+              Membakar sampah adalah cara paling mudah mengatasinya.
+            </p>
+
+            <div class="fact-title">
+              ✅ Fakta
+            </div>
+            <p>
+              Membakar sampah dapat menghasilkan asap dan zat berbahaya yang
+              mencemari udara serta berdampak buruk bagi kesehatan.
+            </p>
+          </div>
+
+          <div class="myth-card">
+            <div class="myth-title">
+              ❌ Mitos
+            </div>
+            <p>
+              Sampah yang dibuang ke sungai akan hilang dengan sendirinya.
+            </p>
+
+            <div class="fact-title">
+              ✅ Fakta
+            </div>
+            <p>
+              Sampah di sungai dapat menyumbat aliran air, menyebabkan banjir, serta
+              mencemari ekosistem sungai hingga laut.
+            </p>
+          </div>
+
+          <div class="myth-card">
+            <div class="myth-title">
+              ❌ Mitos
+            </div>
+            <p>
+              Memilah sampah itu merepotkan dan tidak ada manfaatnya.
+            </p>
+
+            <div class="fact-title">
+              ✅ Fakta
+            </div>
+            <p>
+              Pemilahan sampah mempermudah proses daur ulang, mengurangi pencemaran,
+              serta meningkatkan nilai ekonomi sampah.
+            </p>
+          </div>
+
+          <div class="myth-card">
+            <div class="myth-title">
+              ❌ Mitos
+            </div>
+            <p>
+              Sampah dalam jumlah sedikit tidak akan berdampak.
+            </p>
+
+            <div class="fact-title">
+              ✅ Fakta
+            </div>
+            <p>
+              Jika setiap orang berpikir demikian, jumlah sampah akan terus
+              bertambah dan menimbulkan masalah besar bagi lingkungan.
+            </p>
+          </div>
+
         </div>
       </div>
     </section>
@@ -1067,6 +927,8 @@
       </div>
     </section>
 
+
+
     <!-- SECTION 4: TIPS PILAH SAMPAH -->
     <section class="section section-alt">
       <div class="container">
@@ -1145,6 +1007,163 @@
       </div>
     </section>
 
+    <!-- SECTION: BANK SAMPAH -->
+    <section class="section section-alt" id="bank-sampah">
+      <div class="container">
+
+        <div class="section-header">
+          <span class="section-label">🏦 Bank Sampah</span>
+          <h2 class="section-title">
+            Mengenal Bank Sampah
+          </h2>
+          <p class="section-subtitle">
+            Bank sampah adalah tempat masyarakat dapat menyetorkan sampah yang telah
+            dipilah untuk didaur ulang. Selain menjaga lingkungan tetap bersih,
+            sampah juga memiliki nilai ekonomi yang dapat ditabung.
+          </p>
+        </div>
+
+        <div class="bank-grid">
+
+          <!-- Apa Itu -->
+          <div class="bank-card">
+            <div class="bank-icon">♻️</div>
+            <h3>Apa Itu Bank Sampah?</h3>
+            <p>
+              Bank sampah merupakan sistem pengelolaan sampah berbasis masyarakat
+              yang mengajak warga memilah sampah dari rumah. Sampah yang masih
+              bernilai seperti plastik, kertas, logam, dan botol akan ditimbang,
+              dicatat, kemudian dijual atau didaur ulang.
+            </p>
+          </div>
+
+          <!-- Cara Kerja -->
+          <div class="bank-card">
+            <div class="bank-icon">⚙️</div>
+            <h3>Cara Kerja</h3>
+
+            <ul>
+              <li>🏠 Pilah sampah dari rumah.</li>
+              <li>🧺 Bersihkan sampah yang akan disetor.</li>
+              <li>⚖️ Sampah ditimbang oleh petugas.</li>
+              <li>💰 Nilai sampah dicatat sebagai tabungan.</li>
+              <li>🏭 Sampah dikirim ke pengepul atau didaur ulang.</li>
+            </ul>
+
+          </div>
+
+          <!-- Manfaat -->
+          <div class="bank-card">
+            <div class="bank-icon">🌱</div>
+            <h3>Manfaat Bank Sampah</h3>
+
+            <ul>
+              <li>✅ Mengurangi pencemaran lingkungan.</li>
+              <li>✅ Mengurangi volume sampah di TPA.</li>
+              <li>✅ Membiasakan masyarakat memilah sampah.</li>
+              <li>✅ Menambah penghasilan dari hasil tabungan sampah.</li>
+              <li>✅ Mendukung kegiatan daur ulang.</li>
+            </ul>
+
+          </div>
+
+          <!-- Cara Menyetor -->
+          <div class="bank-card">
+            <div class="bank-icon">📦</div>
+            <h3>Cara Menyetor Sampah</h3>
+
+            <ol>
+              <li>Pisahkan sampah berdasarkan jenisnya.</li>
+              <li>Bersihkan botol, kaleng, dan plastik dari sisa makanan.</li>
+              <li>Pastikan sampah dalam kondisi kering.</li>
+              <li>Datang ke bank sampah terdekat.</li>
+              <li>Sampah ditimbang dan dicatat ke buku tabungan.</li>
+            </ol>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+<!-- SECTION: DAMPAK POSITIF -->
+<section class="section" id="dampak-positif">
+  <div class="container">
+
+    <div class="section-header">
+      <span class="section-label">🌱 Dampak Positif</span>
+      <h2 class="section-title">
+        Apa Manfaat Memilah Sampah?
+      </h2>
+      <p class="section-subtitle">
+        Memilah sampah merupakan langkah sederhana yang memberikan manfaat besar
+        bagi lingkungan, kesehatan, dan kehidupan masyarakat. Yuk, mulai
+        membiasakan memilah sampah dari rumah!
+      </p>
+    </div>
+
+    <div class="positive-grid">
+
+      <div class="positive-card">
+        <div class="positive-icon">🌱</div>
+        <h3>Lingkungan Lebih Bersih</h3>
+        <p>
+          Sampah yang dipilah dan dikelola dengan baik membuat lingkungan tetap
+          bersih, nyaman, dan indah untuk ditinggali.
+        </p>
+      </div>
+
+      <div class="positive-card">
+        <div class="positive-icon">💰</div>
+        <h3>Memiliki Nilai Ekonomi</h3>
+        <p>
+          Sampah seperti plastik, kertas, logam, dan botol dapat dijual atau
+          ditabung melalui bank sampah sehingga menghasilkan tambahan
+          pendapatan.
+        </p>
+      </div>
+
+      <div class="positive-card">
+        <div class="positive-icon">🌍</div>
+        <h3>Mengurangi Pencemaran</h3>
+        <p>
+          Pemilahan sampah membantu mengurangi pencemaran tanah, sungai, laut,
+          dan udara sehingga lingkungan tetap sehat.
+        </p>
+      </div>
+
+      <div class="positive-card">
+        <div class="positive-icon">♻️</div>
+        <h3>Menghemat Sumber Daya Alam</h3>
+        <p>
+          Daur ulang mengurangi penggunaan bahan baku baru sehingga sumber daya
+          alam dapat dimanfaatkan secara lebih bijaksana.
+        </p>
+      </div>
+
+      <div class="positive-card">
+        <div class="positive-icon">🐟</div>
+        <h3>Melindungi Satwa</h3>
+        <p>
+          Berkurangnya sampah di sungai dan laut membantu menjaga habitat serta
+          melindungi ikan, penyu, burung, dan satwa lainnya.
+        </p>
+      </div>
+
+      <div class="positive-card">
+        <div class="positive-icon">❤️</div>
+        <h3>Menjaga Kesehatan Masyarakat</h3>
+        <p>
+          Lingkungan yang bersih mengurangi risiko berkembangnya nyamuk, lalat,
+          dan tikus penyebab berbagai penyakit.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
 
     <section class="section" id="eco-tips">
 
